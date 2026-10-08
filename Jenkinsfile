@@ -30,14 +30,16 @@ pipeline {
 
         stage('Docker Run') {
             steps {
-                sh 'docker rm -f mini-devops-project || true'
+                sh 'docker stop -f mini-devops-project || true'
+                sh 'docker rm -f mini-devops-project || true'                
                 sh 'docker run -d -p 5000:5000 --name mini-devops-project mini:latest'
             }
         }
 
         stage('Health Check') {
             steps {
-                sh 'curl --fail http://localhost:5000/health'
+               sh 'sleep 5' 
+               sh 'curl --fail http://localhost:5000/health'
             }
         }
     }
