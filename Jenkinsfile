@@ -27,6 +27,19 @@ pipeline {
                 sh 'docker build -t mini:latest .'
             }
         }
+       stage('Docker Push') {
+           steps {
+               withCredentials([usernamePassword(
+               credentialsId: 'dockerhub-credentials',
+               usernameVariable: 'DOCKER_USER',
+               passwordVariable: 'DOCKER_PASS'
+           )]) {
+                sh 'echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin'
+                sh 'docker tag mini:latest $DOCKER_USER/mini-devops-app:latest'
+                sh 'docker push $DOCKER_USER/mini-devops-app:latest'
+        }
+    }
+}
 
         stage('Docker Run') {
             steps {
