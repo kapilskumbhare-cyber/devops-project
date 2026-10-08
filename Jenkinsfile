@@ -22,5 +22,23 @@ pipeline {
             }
         }
 
+        stage('Docker Build') {
+            steps {
+                sh 'docker build -t mini:latest .'
+            }
+        }
+
+        stage('Docker Run') {
+            steps {
+                sh 'docker rm -f mini-devops-project || true'
+                sh 'docker run -d -p 5000:5000 --name mini-devops-project mini:latest'
+            }
+        }
+
+        stage('Health Check') {
+            steps {
+                sh 'curl --fail http://localhost:5000/health'
+            }
+        }
     }
 }
