@@ -1,0 +1,7 @@
+
+services:
+  web:
+    image: kapilkumbhare/mini-devops-app:${IMAGE_TAG:-latest}
+    ports:
+      - "5000:5000"
+

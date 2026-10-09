@@ -43,14 +43,16 @@ pipeline {
     }
 }
 
-        stage('Docker Run') {
+
+       stage('Docker Compose Deploy') {
             steps {
-                sh 'docker pull kapilkumbhare/mini-devops-app:${BUILD_NUMBER}'
-                sh 'docker stop  mini-devops-project || true'
-                sh 'docker rm  mini-devops-project || true'                
-                sh 'docker run -d -p 5000:5000 --name mini-devops-project kapilkumbhare/mini-devops-app:${BUILD_NUMBER}'
-            }
-        }
+                  sh '''
+                    export IMAGE_TAG=${BUILD_NUMBER}
+                    docker compose pull web
+                    docker compose up -d --force-recreate web
+                     '''
+    }
+}
 
         stage('Health Check') {
             steps {
