@@ -24,7 +24,7 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                sh 'docker build -t mini:latest .'
+                sh 'docker build -t mini:${BUILD_NUMBER} .'
             }
         }
        stage('Docker Push') {
@@ -35,7 +35,9 @@ pipeline {
                passwordVariable: 'DOCKER_PASS'
            )]) {
                 sh 'echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin'
-                sh 'docker tag mini:latest $DOCKER_USER/mini-devops-app:latest'
+                sh 'docker tag mini:${BUILD_NUMBER} $DOCKER_USER/mini-devops-app:${BUILD_NUMBER}'
+                sh 'docker tag mini:${BUILD_NUMBER} $DOCKER_USER/mini-devops-app:latest'
+                sh 'docker push $DOCKER_USER/mini-devops-app:${BUILD_NUMBER}'
                 sh 'docker push $DOCKER_USER/mini-devops-app:latest'
         }
     }
@@ -43,10 +45,10 @@ pipeline {
 
         stage('Docker Run') {
             steps {
-                sh 'docker pull kapilkumbhare/mini-devops-app:latest'
+                sh 'docker pull kapilkumbhare/mini-devops-app:${BUILD_NUMBER}'
                 sh 'docker stop  mini-devops-project || true'
-                sh 'docker rm -f mini-devops-project || true'                
-                sh 'docker run -d -p 5000:5000 --name mini-devops-project kapilkumbhare/mini-devops-app'
+                sh 'docker rm  mini-devops-project || true'                
+                sh 'docker run -d -p 5000:5000 --name mini-devops-project kapilkumbhare/mini-devops-app:${BUILD_NUMBER}'
             }
         }
 
