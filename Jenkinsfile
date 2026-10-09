@@ -43,9 +43,10 @@ pipeline {
 
         stage('Docker Run') {
             steps {
+                sh 'docker pull kapilkumbhare/mini-devops-app:latest'
                 sh 'docker stop  mini-devops-project || true'
                 sh 'docker rm -f mini-devops-project || true'                
-                sh 'docker run -d -p 5000:5000 --name mini-devops-project mini:latest'
+                sh 'docker run -d -p 5000:5000 --name mini-devops-project kapilkumbhare/mini-devops-app'
             }
         }
 
