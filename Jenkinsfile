@@ -73,7 +73,7 @@ pipeline {
                 ssh -o BatchMode=yes \
                 -o StrictHostKeyChecking=accept-new \
                 -i "$SSH_KEY" \
-                "$SSH_USER@3.27.135.19" \
+                "$SSH_USER@3.26.201.80" \
                 'whoami'
                '''
         }                
@@ -81,7 +81,7 @@ pipeline {
  }
         stage('EC2 Health Check') {
              steps {
-                   sh 'curl --fail http://3.27.135.19/health'
+                   sh 'curl --fail http://3.26.201.80/health'
      }
   }
 
