@@ -81,7 +81,7 @@ pipeline {
  }
         stage('EC2 Health Check') {
              steps {
-
+                   sh 'curl --fail http://3.27.135.19/health'
      }
   }
 
