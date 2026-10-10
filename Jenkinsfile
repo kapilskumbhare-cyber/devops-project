@@ -58,7 +58,32 @@ pipeline {
             steps {
                sh 'sleep 5' 
                sh 'curl --fail http://localhost:5000/health'
-            }
-        }
+     }     
+}
+        stage('Deploy to EC2') {
+             steps {
+                withCredentials([
+                    sshUserPrivateKey(
+                        credentialsId: 'ec2-ssh-key',
+                        keyFileVariable: 'SSH_KEY',
+                        usernameVariable: 'SSH_USER'
+                    )
+                ])  {
+            sh '''
+                ssh -o BatchMode=yes \
+                -o StrictHostKeyChecking=accept-new \
+                -i "$SSH_KEY" \
+                "$SSH_USER@3.27.135.19" \
+                'whoami'
+               '''
+        }                
+     }
+ }
+        stage('EC2 Health Check') {
+             steps {
+
+     }
+  }
+
     }
 }
